@@ -12,6 +12,8 @@ jobs:
       - uses: actions/setup-node@v4
         with: {node-version: 20}
       - run: node poll.mjs
+        env:
+          BUTTONDOWN_API_KEY: ${{ secrets.BUTTONDOWN_API_KEY }}
       - run: node rates.mjs || echo "rates refresh failed, keeping old"
       - run: |
           git config user.name "link-yield-watch-bot"

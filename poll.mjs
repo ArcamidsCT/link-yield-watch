@@ -14,6 +14,22 @@ const d = { readAt:new Date().toISOString(), block:parseInt(block,16), pool:POOL
   minPerStaker:link(words(lim)[0]), maxPerStaker:link(words(lim)[1]), active:words(act)[0]===1n };
 d.available = d.maxPoolSize - d.totalStaked; d.isOpen = d.active && d.available >= d.minPerStaker;
 const prev = fs.existsSync('data.json') ? JSON.parse(fs.readFileSync('data.json')) : null;
-if (prev && !prev.isOpen && d.isOpen) { console.log('ALERT: pool opened', d.available, 'LINK'); /* TODO: send alert via Buttondown */ }
-const key=o=>o&&JSON.stringify([o.maxPoolSize,o.totalStaked,o.minPerStaker,o.maxPerStaker,o.active]);
+// ---- Alerts (dedupe: one email per opening event; flag resets once the pool is full again)
+const DRY = process.argv.includes('--dry-run') || process.env.DRY_RUN === '1';
+const SITE = 'https://arcamidsct.github.io/link-yield-watch/';
+d.alertSent = d.isOpen ? Boolean(prev?.isOpen && prev?.alertSent) : false;
+if (d.isOpen && !d.alertSent && prev) {
+  const n = Math.floor(d.available).toLocaleString('en-US');
+  const email = { subject: `Chainlink staking spot open: ${n} LINK available`,
+    body: `The Chainlink Community Staking Pool has **${n} LINK** of open capacity as of block ${d.block}.\n\nSpots usually fill fast. Stake only via the official site: [staking.chain.link](https://staking.chain.link)\n\nLive status: [LINK Yield Watch](${SITE})\n\n_Never share your seed phrase. Not financial advice._`,
+    status: 'about_to_send' };
+  if (DRY) { console.log('[dry-run] would send:', email.subject); d.alertSent = true; }
+  else if (!process.env.BUTTONDOWN_API_KEY) console.log('No BUTTONDOWN_API_KEY; alert not sent');
+  else {
+    const r = await fetch('https://api.buttondown.com/v1/emails', { method:'POST', headers:{ Authorization:`Token ${process.env.BUTTONDOWN_API_KEY}`, 'Content-Type':'application/json' }, body: JSON.stringify(email) });
+    if (r.ok) { d.alertSent = true; console.log('Alert sent:', email.subject); }
+    else { console.error('Alert send failed', r.status, (await r.text()).slice(0,300)); process.exitCode = 1; }
+  }
+}
+const key=o=>o&&JSON.stringify([o.maxPoolSize,o.totalStaked,o.minPerStaker,o.maxPerStaker,o.active,o.alertSent]);
 if (!prev || key(prev)!==key(d) || Date.now()-Date.parse(prev.readAt)>3600e3) fs.writeFileSync('data.json', JSON.stringify(d,null,2)); // heartbeat hourly console.log(d);
