@@ -26,7 +26,7 @@ if (d.isOpen && !d.alertSent && prev) {
   if (DRY) { console.log('[dry-run] would send:', email.subject); d.alertSent = true; }
   else if (!process.env.BUTTONDOWN_API_KEY) console.log('No BUTTONDOWN_API_KEY; alert not sent');
   else {
-    const r = await fetch('https://api.buttondown.com/v1/emails', { method:'POST', headers:{ Authorization:`Token ${process.env.BUTTONDOWN_API_KEY}`, 'Content-Type':'application/json' }, body: JSON.stringify(email) });
+    const r = await fetch('https://api.buttondown.com/v1/emails', { method:'POST', headers:{ Authorization:`Token ${process.env.BUTTONDOWN_API_KEY}`, 'Content-Type':'application/json', 'X-Buttondown-Live-Dangerously':'true' }, body: JSON.stringify(email) });
     if (r.ok) { d.alertSent = true; console.log('Alert sent:', email.subject); }
     else { console.error('Alert send failed', r.status, (await r.text()).slice(0,300)); process.exitCode = 1; }
   }
