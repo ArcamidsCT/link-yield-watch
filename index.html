@@ -1,14 +1,77 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>LINK Yield Watch</title>
-<style>body{font-family:system-ui;max-width:760px;margin:2em auto;padding:0 1em}.big{font-size:2em;font-weight:700}.open{color:#090}.full{color:#c00}table{width:100%;border-collapse:collapse}td,th{padding:.4em;border-bottom:1px solid #ddd;text-align:left}small{color:#666}</style></head>
-<body><h1>LINK Yield Watch</h1><p>Is the official Chainlink Community Staking Pool open?</p>
-<div id="s" class="big">Loading…</div><p id="d"></p>
-<p style="padding:.6em;background:#fff6d6;border:1px solid #e0c060"><b>Email alerts coming soon.</b> Signup isn't live yet. Check back shortly.</p>
-<p><small>Only use chain.link/economics/staking. We never ask for your wallet or seed phrase.</small></p>
-<h2>Other ways to earn on LINK</h2><table id="t"><tr><th>Project</th><th>Chain</th><th>Asset</th><th>APY</th><th>TVL</th></tr></table>
-<p><small>Rates via DefiLlama. Not financial advice.</small></p>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LINK Yield Watch: Chainlink Staking Pool Tracker & LINK Yields</title>
+<meta name="description" content="Is the Chainlink community staking pool open? Live on-chain capacity, open spots, and LINK yields compared across protocols.">
+<meta name="theme-color" content="#0b0f1a">
+<meta property="og:type" content="website"><meta property="og:title" content="LINK Yield Watch"><meta property="og:description" content="Live Chainlink staking pool status and LINK yields, read straight from Ethereum mainnet.">
+<meta property="og:url" content="https://arcamidsct.github.io/link-yield-watch/"><meta property="og:image" content="https://arcamidsct.github.io/link-yield-watch/og.png">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://arcamidsct.github.io/link-yield-watch/og.png">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0f1a;--card:#121829;--line:#222b44;--txt:#e8ecf7;--mut:#8b95b2;--blue:#375BD2;--green:#22c55e;--red:#ef4444;--amber:#f5b942}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(1200px 600px at 50% -200px,#1a2a6655,transparent),var(--bg);color:var(--txt);font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+nav{display:flex;align-items:center;gap:10px;padding:20px 0;font-weight:700}nav img{width:28px}nav .tag{margin-left:auto;font-size:12px;color:var(--mut);border:1px solid var(--line);padding:5px 10px;border-radius:99px}
+.live{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-right:6px;animation:blink 2s infinite}
+@keyframes blink{50%{opacity:.3}}
+.hero{text-align:center;padding:48px 0 24px}.hero h1{font-size:clamp(28px,5vw,48px);letter-spacing:-.02em;margin:0 0 12px;font-weight:800}.hero p{color:var(--mut);margin:0 auto 28px;max-width:560px;line-height:1.6}
+.pill{display:inline-flex;align-items:center;gap:14px;font-size:clamp(28px,6vw,52px);font-weight:800;letter-spacing:.04em;padding:16px 40px;border-radius:99px;border:2px solid currentColor;position:relative}
+.pill .dot{width:18px;height:18px;border-radius:50%;background:currentColor;box-shadow:0 0 0 0 currentColor;animation:pulse 1.8s infinite}
+.pill.full{color:var(--red);background:#ef444414}.pill.open{color:var(--green);background:#22c55e14}.pill.load{color:var(--mut)}
+@keyframes pulse{0%{box-shadow:0 0 0 0 currentColor}70%{box-shadow:0 0 0 16px transparent}100%{box-shadow:0 0 0 0 transparent}}
+.sub{margin-top:14px;color:var(--mut);font-size:15px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px}
+.bar{margin:32px 0 16px}.bar .top{display:flex;justify-content:space-between;font-size:14px;color:var(--mut);margin-bottom:10px}.bar .top b{color:var(--txt)}
+.track{height:14px;background:#0d1322;border-radius:99px;overflow:hidden;border:1px solid var(--line)}.fill{height:100%;width:0;background:linear-gradient(90deg,#2a46a8,var(--blue),#6d8cff);border-radius:99px;transition:width 1.4s cubic-bezier(.2,.8,.2,1)}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.m .k{font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.08em}.m .v{font-size:22px;font-weight:700;margin-top:8px;font-variant-numeric:tabular-nums}.m .u{font-size:12px;color:var(--mut);margin-top:4px}
+h2{font-size:22px;margin:48px 0 6px;letter-spacing:-.01em}.lead{color:var(--mut);margin:0 0 16px;font-size:14px}
+table{width:100%;border-collapse:collapse;font-size:14px}th{text-align:left;color:var(--mut);font-weight:500;font-size:12px;text-transform:uppercase;letter-spacing:.06em;padding:12px;border-bottom:1px solid var(--line);cursor:pointer;user-select:none;white-space:nowrap}th.num,td.num{text-align:right}th:hover{color:var(--txt)}th .ar{opacity:.4}th.on .ar{opacity:1;color:var(--blue)}
+td{padding:14px 12px;border-bottom:1px solid #1a2238;font-variant-numeric:tabular-nums}tr:last-child td{border:0}tbody tr:hover{background:#ffffff05}
+.proto{font-weight:600}.chip{font-size:12px;color:var(--mut);background:#0d1322;border:1px solid var(--line);padding:3px 8px;border-radius:6px}.apy{font-weight:700;color:#7d9bff}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:48px}
+.soon h3,.warn h3{margin:0 0 8px;font-size:17px}.soon p,.warn p{margin:0;color:var(--mut);line-height:1.6;font-size:14px}
+.soon{background:linear-gradient(135deg,#375BD222,var(--card))}.soon .f{display:flex;gap:8px;margin-top:16px}.soon input{flex:1;background:#0d1322;border:1px solid var(--line);color:var(--mut);padding:12px;border-radius:10px;font:inherit}.soon button{background:#375BD255;color:#c9d4ff;border:0;padding:12px 16px;border-radius:10px;font:inherit;font-weight:600;cursor:not-allowed}
+.badge{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.08em;background:var(--blue);color:#fff;padding:3px 8px;border-radius:6px;margin-bottom:10px}
+.warn{border-color:#f5b94255;background:#f5b9420d}.warn h3{color:var(--amber)}.warn a{color:#fff}
+footer{margin:56px 0 32px;padding-top:24px;border-top:1px solid var(--line);color:var(--mut);font-size:13px;line-height:1.7}footer a{color:var(--mut)}
+.tw{overflow-x:auto}
+@media(max-width:860px){.grid{grid-template-columns:repeat(2,1fr)}.grid .m:last-child{grid-column:span 2}.two{grid-template-columns:1fr}.hide-sm{display:none}}
+@media(max-width:480px){.pill{padding:12px 26px}.m .v{font-size:18px}td,th{padding:10px 8px}}
+</style></head><body><div class="wrap">
+<nav><img src="favicon.svg" alt="">LINK Yield Watch<span class="tag"><span class="live"></span>Live on-chain</span></nav>
+<section class="hero"><h1>Is the Chainlink staking pool open?</h1><p>We read the official Community Staking Pool on Ethereum mainnet so you don't have to keep refreshing.</p>
+<div id="pill" class="pill load"><span class="dot"></span><span id="pt">CHECKING</span></div><div id="sub" class="sub">&nbsp;</div></section>
+<div class="card bar"><div class="top"><span>Pool capacity</span><span><b id="pct">–</b> filled</span></div><div class="track"><div id="fill" class="fill"></div></div></div>
+<div class="grid">
+<div class="card m"><div class="k">Total staked</div><div class="v" id="m1">–</div><div class="u">LINK</div></div>
+<div class="card m"><div class="k">Pool max</div><div class="v" id="m2">–</div><div class="u">LINK</div></div>
+<div class="card m"><div class="k">Open spots</div><div class="v" id="m3">–</div><div class="u">LINK available</div></div>
+<div class="card m"><div class="k">Per-wallet limit</div><div class="v" id="m4">–</div><div class="u">LINK min – max</div></div>
+<div class="card m"><div class="k">Last checked</div><div class="v" id="m5">–</div><div class="u" id="m5u">&nbsp;</div></div>
+</div>
+<h2>Other ways to earn on LINK</h2><p class="lead">Live yields across DeFi. Click a column to sort.</p>
+<div class="card tw" style="padding:6px 10px"><table><thead><tr><th data-k="project">Protocol <span class="ar">↕</span></th><th data-k="chain" class="hide-sm">Chain <span class="ar">↕</span></th><th data-k="symbol">Asset <span class="ar">↕</span></th><th data-k="apy" class="num">APY <span class="ar">↕</span></th><th data-k="tvlUsd" class="num">TVL <span class="ar">↕</span></th></tr></thead><tbody id="tb"><tr><td colspan="5" style="color:var(--mut)">Loading rates…</td></tr></tbody></table></div>
+<div class="two"><div class="card soon"><span class="badge">COMING SOON</span><h3>Get an email the moment spots open</h3><p>Pool openings can fill within minutes. Alerts will land in your inbox as soon as capacity frees up.</p><div class="f"><input disabled placeholder="you@email.com" aria-label="Email (coming soon)"><button disabled>Coming soon</button></div></div>
+<div class="card warn"><h3>⚠ Beware of fake “staking open” links</h3><p>Only stake through the official <a href="https://staking.chain.link" rel="noopener">staking.chain.link</a>. Nobody legit will DM you, and no one needs your seed phrase. We never ask you to connect a wallet.</p></div></div>
+<footer>Pool data is read directly from the Chainlink Community Staking Pool contract on Ethereum mainnet (<a id="ca" href="https://etherscan.io/address/0xBc10f2E862ED4502144c7d632a3459F49DFCDB5e">0xBc10…DB5e</a>). Yield data from <a href="https://defillama.com/yields">DefiLlama</a>. Updated roughly every 10 minutes.<br>Not financial advice. Not affiliated with Chainlink Labs. Do your own research.</footer>
+</div>
 <script>
-fetch('data.json').then(r=>r.json()).then(d=>{const f=n=>n.toLocaleString(undefined,{maximumFractionDigits:0});
-s.textContent=d.isOpen?`OPEN: ${f(d.available)} LINK available`:'FULL: no spots right now';s.className='big '+(d.isOpen?'open':'full');
-document.getElementById('d').textContent=`${f(d.totalStaked)} / ${f(d.maxPoolSize)} LINK staked · limit ${d.minPerStaker}–${f(d.maxPerStaker)} per wallet · block ${d.block} · checked ${new Date(d.readAt).toLocaleString()}`});
-fetch('rates.json').then(r=>r.json()).then(a=>a.forEach(x=>t.insertAdjacentHTML('beforeend',`<tr><td>${x.project}</td><td>${x.chain}</td><td>${x.symbol}</td><td>${x.apy}%</td><td>$${(x.tvlUsd/1e6).toFixed(1)}M</td></tr>`)));
+const $=id=>document.getElementById(id),fmt=n=>n.toLocaleString('en-US',{maximumFractionDigits:0}),
+usd=n=>n>=1e9?'$'+(n/1e9).toFixed(2)+'B':n>=1e6?'$'+(n/1e6).toFixed(1)+'M':'$'+(n/1e3).toFixed(0)+'K',
+NAMES={'aave-v3':'Aave V3','aave-v4':'Aave V4','stake.link-liquid':'stake.link','uniswap-v4':'Uniswap V4','uniswap-v3':'Uniswap V3','bancor-v3':'Bancor V3','compound-v3':'Compound V3','curve-dex':'Curve','beefy':'Beefy','venus-core-pool':'Venus','spark':'Spark','morpho-blue':'Morpho'},
+nm=p=>NAMES[p]||p.split('-').map(w=>w[0].toUpperCase()+w.slice(1)).join(' ');
+function ago(t){const s=(Date.now()-Date.parse(t))/1e3;return s<90?'just now':s<5400?Math.round(s/60)+' min ago':s<172800?Math.round(s/3600)+' h ago':Math.round(s/86400)+' d ago'}
+fetch('data.json',{cache:'no-store'}).then(r=>r.json()).then(d=>{
+ const p=$('pill');p.className='pill '+(d.isOpen?'open':'full');$('pt').textContent=d.isOpen?'OPEN':'FULL';
+ $('sub').textContent=d.isOpen?fmt(d.available)+' LINK of capacity available right now':'No open spots. The pool is at maximum capacity.';
+ const pc=d.totalStaked/d.maxPoolSize*100;$('pct').textContent=pc.toFixed(pc>=99.99?0:2)+'%';requestAnimationFrame(()=>$('fill').style.width=Math.min(pc,100)+'%');
+ $('m1').textContent=fmt(d.totalStaked);$('m2').textContent=fmt(d.maxPoolSize);$('m3').textContent=fmt(Math.max(d.available,0));
+ $('m4').textContent=fmt(d.minPerStaker)+'–'+fmt(d.maxPerStaker);$('m5').textContent=ago(d.readAt);$('m5u').textContent='Block '+d.block.toLocaleString('en-US');
+}).catch(()=>{$('pt').textContent='UNAVAILABLE'});
+let rows=[],sk='tvlUsd',dir=-1;
+function draw(){rows.sort((a,b)=>(a[sk]>b[sk]?1:a[sk]<b[sk]?-1:0)*dir);document.querySelectorAll('th').forEach(t=>{t.classList.toggle('on',t.dataset.k===sk);t.querySelector('.ar').textContent=t.dataset.k===sk?(dir>0?'↑':'↓'):'↕'});
+ $('tb').innerHTML=rows.map(x=>`<tr><td class="proto">${nm(x.project)}</td><td class="hide-sm"><span class="chip">${x.chain}</span></td><td>${x.symbol}</td><td class="num apy">${x.apy.toFixed(2)}%</td><td class="num">${usd(x.tvlUsd)}</td></tr>`).join('')}
+document.querySelectorAll('th').forEach(t=>t.onclick=()=>{const k=t.dataset.k;dir=sk===k?-dir:(k==='apy'||k==='tvlUsd'?-1:1);sk=k;draw()});
+fetch('rates.json',{cache:'no-store'}).then(r=>r.json()).then(a=>{rows=a;draw()}).catch(()=>$('tb').innerHTML='<tr><td colspan="5">Rates unavailable</td></tr>');
 </script></body></html>
