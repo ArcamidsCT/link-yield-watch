@@ -1,0 +1,14 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>LINK Yield Watch</title>
+<style>body{font-family:system-ui;max-width:760px;margin:2em auto;padding:0 1em}.big{font-size:2em;font-weight:700}.open{color:#090}.full{color:#c00}table{width:100%;border-collapse:collapse}td,th{padding:.4em;border-bottom:1px solid #ddd;text-align:left}small{color:#666}</style></head>
+<body><h1>LINK Yield Watch</h1><p>Is the official Chainlink Community Staking Pool open?</p>
+<div id="s" class="big">Loading…</div><p id="d"></p>
+<p style="padding:.6em;background:#fff6d6;border:1px solid #e0c060"><b>Email alerts coming soon.</b> Signup isn't live yet. Check back shortly.</p>
+<p><small>Only use chain.link/economics/staking. We never ask for your wallet or seed phrase.</small></p>
+<h2>Other ways to earn on LINK</h2><table id="t"><tr><th>Project</th><th>Chain</th><th>Asset</th><th>APY</th><th>TVL</th></tr></table>
+<p><small>Rates via DefiLlama. Not financial advice.</small></p>
+<script>
+fetch('data.json').then(r=>r.json()).then(d=>{const f=n=>n.toLocaleString(undefined,{maximumFractionDigits:0});
+s.textContent=d.isOpen?`OPEN: ${f(d.available)} LINK available`:'FULL: no spots right now';s.className='big '+(d.isOpen?'open':'full');
+document.getElementById('d').textContent=`${f(d.totalStaked)} / ${f(d.maxPoolSize)} LINK staked · limit ${d.minPerStaker}–${f(d.maxPerStaker)} per wallet · block ${d.block} · checked ${new Date(d.readAt).toLocaleString()}`});
+fetch('rates.json').then(r=>r.json()).then(a=>a.forEach(x=>t.insertAdjacentHTML('beforeend',`<tr><td>${x.project}</td><td>${x.chain}</td><td>${x.symbol}</td><td>${x.apy}%</td><td>$${(x.tvlUsd/1e6).toFixed(1)}M</td></tr>`)));
+</script></body></html>
