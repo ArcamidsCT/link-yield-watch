@@ -3,15 +3,15 @@
   "project": "aave-v3",
   "chain": "Ethereum",
   "symbol": "LINK",
-  "apy": 0.02,
-  "tvlUsd": 86733422
+  "apy": 0.01,
+  "tvlUsd": 87112009
  },
  {
   "project": "stake.link-liquid",
   "chain": "Ethereum",
   "symbol": "STLINK",
   "apy": 4.73,
-  "tvlUsd": 85384828
+  "tvlUsd": 85770921
  },
  {
   "project": "uniswap-v4",
@@ -32,55 +32,55 @@
   "chain": "Ethereum",
   "symbol": "LINK",
   "apy": 0,
-  "tvlUsd": 7811054
+  "tvlUsd": 7834950
  },
  {
   "project": "compound-v3",
   "chain": "Ethereum",
   "symbol": "LINK",
   "apy": 0,
-  "tvlUsd": 5725319
+  "tvlUsd": 5759957
  },
  {
   "project": "curve-dex",
   "chain": "Ethereum",
   "symbol": "LINK-STLINK",
-  "apy": 0.08,
-  "tvlUsd": 5659833
+  "apy": 10.15,
+  "tvlUsd": 5605685
  },
  {
   "project": "aave-v3",
   "chain": "Arbitrum",
   "symbol": "LINK",
   "apy": 0.01,
-  "tvlUsd": 3716864
+  "tvlUsd": 3729804
  },
  {
   "project": "beefy",
   "chain": "Ethereum",
   "symbol": "STLINK-LINK",
-  "apy": 11.2,
-  "tvlUsd": 3170422
+  "apy": 11.18,
+  "tvlUsd": 3170477
  },
  {
   "project": "compound-v3",
   "chain": "Ethereum",
   "symbol": "LINK",
   "apy": 0,
-  "tvlUsd": 2502615
+  "tvlUsd": 2511328
  },
  {
   "project": "aave-v3",
   "chain": "Polygon",
   "symbol": "LINK",
   "apy": 0.02,
-  "tvlUsd": 1715137
+  "tvlUsd": 1721108
  },
  {
   "project": "venus-core-pool",
   "chain": "BSC",
   "symbol": "LINK",
   "apy": 0.04,
-  "tvlUsd": 1665046
+  "tvlUsd": 1669507
  }
 ]
